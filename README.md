@@ -1,5 +1,10 @@
 # Verus
 
+**[Live Demo � Project Meridian: Atlas Climate Systems](https://the-resonance-institute.github.io/verus-public)**
+*Confirmatory diligence engagement on a \ HVAC manufacturer acquisition. 6 findings, live Intelligence Chat, 100-day plan stress test.*
+
+---
+
 **AI-driven investigative reasoning across represented narratives and live operating systems.**
 
 Every organization operates on two surfaces simultaneously. The first is the represented surface — management reports, board presentations, CIMs, investor updates, location summaries. The second is the operating reality — what is actually in the live systems that run the business.
