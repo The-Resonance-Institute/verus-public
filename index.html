@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verus — Confirmatory Diligence Intelligence</title>
+  <meta name="description" content="AI-driven investigative reasoning across represented narratives and live operating systems. See a live diligence engagement on Atlas Climate Systems." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { height: 100%; }
+    body { background: #0d0f12; color: #e8e6e1; font-family: 'DM Sans', sans-serif; }
+    button { font-family: inherit; cursor: pointer; }
+    textarea { font-family: inherit; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d0f12; }
+    ::-webkit-scrollbar-thumb { background: #2a2d35; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3d45; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script type="text/babel" data-presets="react">
+
+const { useState, useEffect, useRef, useCallback } = React;
+
+const ENGAGEMENT = {
+  name: "Project Meridian",
+  target: "Atlas Climate Systems",
+  sponsor: "Ridgeline Capital → Apex Industrial Partners",
+  dealSize: "$148.0M",
+  statedEBITDA: "$22.4M",
+  verusEBITDA: "$20.2M",
+  statedMultiple: "6.6x",
+  verusMultiple: "7.3x",
+  stage: "Confirmatory Diligence — Week 3 of 6",
+  window: "Jan 6 – Feb 14, 2026",
+  products: "Commercial RTUs (5–150 ton) · Custom AHUs · Process Chillers",
+  markets: "Commercial construction 44% · Healthcare 31% · Data centers 18% · Industrial 7%",
+  plants: "Atlanta GA (flagship RTU) · Charlotte NC (custom AHUs) · Memphis TN (chillers)",
+  employees: "847",
+  connectors: ["Dynamics 365 F&O", "Salesforce CRM", "Fiix CMMS", "SQL Data Warehouse"],
+};
+
+const FINDINGS = [
+  {
+    id: "COM-001", domain: "Commercial", verdict: "DIVERGENT", materiality: "HIGH", confidence: 0.93,
+    title: "Revenue Recognition — Pull-Forward & Reclassification",
+    claim: "Net revenue grew 21.4% YoY from $39.6M to $48.1M in FY2025, driven by healthcare vertical expansion (Atlas MediCool line) and new data center customer acquisitions. Growth was broad-based across all three facilities.",
+    claimSource: "CIM p.14, §3.2 Revenue Analysis",
+    evidence: "Unit shipments: 2,847 units FY2025 vs 2,610 FY2024 (+9.1%). Avg selling price +4.2%. Implied organic revenue: ~$45.0M. Gap to stated $48.1M: $3.1M. Four distinct components identified in Dynamics 365.",
+    evidenceSource: "Dynamics 365 F&O — production orders, shipment log, service contract ledger, warranty claims DB — queried Jan 14, 2026",
+    divergence: "Stated revenue includes: (1) $4.1M service contract pull-forward — Q3 FY2025 billing date change moved FY2026 renewals into FY2025; (2) $2.8M warranty replacement reclassification — warranty units shifted from cost to revenue; (3) $1.6M BuildRight distributor stocking with 90-day return window open at deal signing; (4) 4 additional distributor orders ($3.6M) with open return windows not disclosed.",
+    financialImpact: "FY2026 Q1 contract billings running 61% below prior year Q1 — pull-forward already depleting forward revenue. Total open return window exposure: $5.2M. Organic unit growth 9.1%, not 21.4%.",
+    valuationImpact: "True LTM revenue: $39.6M–$43.9M. EBITDA margin on true revenue: 28.4%–31.1%. Growth story supporting 6.6x is built on non-recurring items. Multiple not supportable on 9% organic unit growth.",
+    threads: [
+      "Service contract ledger: FY2026 Q1 billings $1.8M vs $4.6M prior year Q1 — pull-forward already consuming forward revenue at deal signing",
+      "BuildRight HVAC Distributors: $1.6M stocking order Nov 2025, 90-day return window expires Feb 15, 2026 — one day after diligence window closes. Not disclosed in data room",
+      "4 additional distributor stocking orders placed Q3–Q4 FY2025 totaling $3.6M — all with open return windows. Verus queried CRM for all orders with return provisions and found these",
+      "Warranty reclassification memo (CMMS WO-2025-0847 attachment): CFO memo dated Q2 FY2025 directing reclassification. Found in CMMS work order system, not in financial disclosures",
+    ],
+    ledgerHash: "a3f7e2b1c9d4f8e6a2b5c8d1e4f7a3b6c9d2e5f8a1b4c7d0e3f6a9b2c5d8e1f4",
+  },
+  {
+    id: "COM-002", domain: "Commercial", verdict: "DIVERGENT", materiality: "HIGH", confidence: 0.91,
+    title: "Customer Concentration — Meridian Healthcare & DataVault",
+    claim: "Atlas serves a diversified customer base of 847 active accounts. No single customer represents more than 12% of LTM revenue. Top 10 customers represent 38% of revenue, consistent with prior years.",
+    claimSource: "CIM p.31, §7.1 Customer Analysis",
+    evidence: "Salesforce CRM closed_won_history: Meridian Healthcare Systems $13.1M LTM = 27.3% of stated $48.1M. DataVault Centers $6.8M = 14.1%. Combined top-2: 41.4%. Management's 12% figure counts only shipped Meridian projects — excludes $7.9M in permit-hold and engineering-phase projects shown as 90%-probability in CRM.",
+    evidenceSource: "Salesforce CRM — closed_won_history, opportunity pipeline, account records, call logs — queried Jan 14, 2026",
+    divergence: "Meridian Children's Pavilion ($4.8M): Cook County environmental permit filed June 2025, average review 14 months — does not ship 2026. DataVault Phoenix ($5.4M): site requires 480V 3-phase utility upgrade, 9-month lead time quoted. Combined 2026 revenue at risk: $10.2M.",
+    financialImpact: "Meridian CFO James Whitmore departed Nov 2025. Dec 2025 CRM call notes: 'capital uncertainty at Meridian, recommend we stay close.' Not disclosed in data room. Meridian full-loss scenario: EBITDA -$3.7M, enterprise value -$24.4M at 6.6x.",
+    valuationImpact: "12% concentration claim is technically defensible only if LOI-stage projects are excluded. Management knew about the permit hold when the CIM was written (CIM dated Oct 2025, permit filed June 2025).",
+    threads: [
+      "Meridian CFO James Whitmore: departed Nov 2025, joined Mercy Regional Health. CRM call log Dec 2025: 'capital uncertainty at Meridian' — not surfaced in data room. Found in CRM account notes, not financial disclosures",
+      "Cook County environmental review: Meridian Children's Pavilion permit filed June 2025. County records show environmental review averaging 14 months in this district. Project realistically ships Q3 2027 at earliest",
+      "DataVault Phoenix: Atlas project notes confirm 480V service upgrade required. Utility quoted 9-month lead time. DataVault's project schedule assumed equipment delivery Q2 2026 — impossible without service upgrade",
+      "DataVault Centers ($6.8M, 14.1%): one Phoenix project = $5.4M = 11.2% of revenue from a single data center. CIM's diversification claim requires excluding both Meridian and DataVault concentrations simultaneously",
+    ],
+    ledgerHash: "b4e8f3c2d7a1e5f9b3c6d0e4f8a2b7c1d5e9f3a7b2c6d1e5f9a4b8c3d7e2f6a1",
+  },
+  {
+    id: "OPS-003", domain: "Operations", verdict: "DIVERGENT", materiality: "HIGH", confidence: 0.94,
+    title: "Backlog Quality — $41.2M Gross vs $19.4M Firm",
+    claim: "$41.2M firm backlog as of December 31, 2025, representing 10.2 months of forward revenue at LTM run rate. Backlog has grown 34% year-over-year, reflecting strong market demand and Atlas's competitive positioning.",
+    claimSource: "CIM p.22, §5.1 Backlog Analysis",
+    evidence: "Dynamics 365 gross order book: $41.2M confirmed. Salesforce CRM contract terms and deposit records: firm (deposited, unconditional, no return provisions) = $19.4M. Conditional or at-risk: $21.8M across four categories.",
+    evidenceSource: "Dynamics 365 F&O order book + Salesforce CRM contract terms + credit ledger — queried Jan 14–15, 2026",
+    divergence: "Breakdown: Firm deposited $19.4M | Meridian permit-hold $8.3M | Distributor stocking w/ return rights $5.2M | Cornerstone Commercial GC-conditional $4.1M | LOI-only $4.2M. True firm backlog: $19.4M = 4.8 months, not 10.2.",
+    financialImpact: "Cornerstone Commercial ($4.1M): orders entered AFTER Atlas credit hold Oct 2025. Existing Cornerstone project $880K 90 days past due. 34% YoY backlog growth is almost entirely from distributor stocking category that did not exist in FY2024.",
+    valuationImpact: "At $41.2M gross, Atlas trades at 0.28x backlog (reasonable). At $19.4M firm, 0.59x — high end of industrial HVAC range. Revenue certainty in Q3–Q4 FY2026 that underpins the deal thesis is not present.",
+    threads: [
+      "Cornerstone Commercial Development ($4.1M, 3 orders): entered by regional sales manager AFTER Atlas credit team placed Cornerstone on credit hold Oct 2025. Credit hold not visible in Salesforce sales module",
+      "Cornerstone existing project (Charlotte AHU, $880K): 90 days past due on progress payment. Dynamics 365 collections memo Oct 2025 not cross-referenced in data room",
+      "LOI-only backlog ($4.2M): 3 of 6 opportunities are in hospitality and retail sectors where construction lending has tightened materially Q4 2025. CRM probability ratings not updated since Q3",
+      "34% backlog growth: FY2024 backlog was 94% firm deposited. FY2025 is 47% firm deposited. Quality of growth has been masked by the gross number",
+    ],
+    ledgerHash: "c5f9a4d8b3e7f2a6c1d5e0f4b8a3c7d2e6f1a5b0c4d8e3f7a2b6c0d4e8f3a7b1",
+  },
+  {
+    id: "FIN-004", domain: "Financial", verdict: "PARTIAL", materiality: "MEDIUM", confidence: 0.88,
+    title: "EBITDA Quality — Warranty Pattern & Adjustment Characterization",
+    claim: "Adjusted EBITDA of $22.4M representing a 31.0% margin. Adjustments include $1.8M one-time facility consolidation costs (Charlotte expansion) and $0.6M non-recurring legal settlement. Underlying margin has expanded 280bps over three years.",
+    claimSource: "CIM p.18, §4.2 Financial Performance",
+    evidence: "Dynamics 365 warranty claims DB: FY2025 $2.3M, FY2024 $2.1M, FY2023 $1.9M. Three-year average $2.1M. Excluded from adjusted EBITDA in all three years as 'non-recurring quality remediation.' Charlotte consolidation: $1.1M genuine one-time, $0.7M capitalized maintenance expensed (same pattern FY2024: $0.6M).",
+    evidenceSource: "Dynamics 365 F&O — warranty claims database, EBITDA bridge, cost center detail — queried Jan 15, 2026",
+    divergence: "FY2023 compressor supplier defect ($890K) was genuinely non-recurring. The remaining $1.2M–$1.4M annual warranty is structural — refrigerant fitting specification in FY2020–2022 production (~4,200 units in field). Atlas engineering documented this in CMMS WO-2023-1842. Known 3 years, never disclosed.",
+    financialImpact: "True recurring EBITDA: $19.6M–$20.8M (midpoint $20.2M) = 27.9% margin. Margin expansion of 280bps driven by warranty reclassification and one-time add-backs — underlying clean expansion ~60bps.",
+    valuationImpact: "$2.2M EBITDA restatement at 6.6x = $14.5M valuation impact. True deal multiple on recurring EBITDA: 7.3x — high end of industrial HVAC comparable transactions (sector range 5.5x–7.5x).",
+    threads: [
+      "CMMS WO-2023-1842: 'Refrigerant Line Fitting Specification — Fleet Impact Assessment' Aug 2023. Identifies FY2020–2022 vintage units (~4,200 in field) with elevated leak risk. Est. warranty exposure $1.1M–$1.6M annually through FY2028. Found in CMMS, not in data room financials",
+      "Charlotte pattern: FY2024 EBITDA bridge shows $0.6M 'one-time' capitalized maintenance. FY2025 shows $0.7M same treatment. This is how Atlas manages maintenance expense timing — not genuine non-recurring",
+      "280bps margin expansion: FY2023 base includes $890K genuine non-recurring compressor issue. Remove from base and expansion is ~60bps. The 280bps figure compares against an artificially depressed FY2023",
+    ],
+    ledgerHash: "d6a0b5e9c4f8d3a7e2b6f1c5d9a4e8b3f7c2d6a1e5f0b4c8d3e7f2a6b1c5d9e4",
+  },
+  {
+    id: "OPS-005", domain: "Operations", verdict: "DIVERGENT", materiality: "HIGH", confidence: 0.89,
+    title: "Charlotte OEE, OSHA Exposure & $1.8M Deferred Maintenance",
+    claim: "OEE of 81% across all facilities, up from 74% in FY2023. Charlotte facility expansion completed Q2 FY2025, adding 23% capacity. Capital investment program complete — no material capex required in the near term.",
+    claimSource: "CIM p.28, §6.3 Operations & Capacity",
+    evidence: "Fiix CMMS OEE dashboard: Atlanta 84.2% (confirmed), Memphis 79.3% (confirmed), Charlotte 67.1% (vs 81% claimed). Charlotte Line 2 manifold press in OSHA hold since Sep 14, 2025 — 147 days at query date, no inspection completed, no closure documented.",
+    evidenceSource: "Fiix CMMS — OEE dashboard, work order history, OSHA 300 log, PM compliance tracker — queried Jan 16, 2026",
+    divergence: "Charlotte OEE 67.1% vs claimed 81% — 13.9 point gap. Root cause: refrigerant manifold assembly cell (Line 2) offline after OSHA recordable Sep 14, 2025. $1.8M deferred maintenance across 14 work orders. 3 assets past service interval. OSHA recordable rate: 1.5/100 vs industry 0.8.",
+    financialImpact: "Charlotte OEE gap = $3.2M annual revenue capacity unavailable. Effective capacity from 'expansion': 8%, not 23%. Workers comp reserve: $180K vs estimated liability $490K–$520K — underfunded $310K–$340K.",
+    valuationImpact: "Near-term capex not in plan: $85K–$120K OSHA remediation + $1.8M deferred maintenance + $310K–$340K WC reserve = $2.2M–$2.3M. 'No material capex required' is false. Charlotte OEE recovery to 81%: 12+ months minimum.",
+    threads: [
+      "OSHA recordable Sep 14, 2025: technician hand laceration on Line 2 manifold press. Press offline 147 days, no inspection, no closure. Not disclosed to Apex in data room",
+      "Charlotte OSHA recordable rate: 3 recordables in 24 months = 1.5/100 employees vs 0.8 industry. Elevated safety profile is systemic, not isolated",
+      "Refrigerant recovery system: 7 months past manufacturer service interval. EPA Section 608 compliance requires annual certified inspection. Non-compliance risk: up to $44,539/day/violation",
+      "Overhead crane: load-rated inspection overdue 6 months. OSHA 29 CFR 1910.179 requires annual qualified engineer inspection. Last inspection March 2025. Citable OSHA violation",
+      "Workers comp reserve: $180K current vs $490K–$520K estimated liability. Underfunded $310K–$340K. Not disclosed",
+      "Charlotte '23% capacity expansion': confirmed floor space installed. With Line 2 constrained, effective new capacity ~8%. CIM claim is 2.9x operating reality",
+    ],
+    ledgerHash: "e7b1c6f0d5a9e4b8f3c7d2a6e1b5f9c4d8a3e7b2f6c1d5a0e4b9f3c8d2a7e1b6",
+  },
+  {
+    id: "FIN-006", domain: "Financial", verdict: "DIVERGENT", materiality: "MEDIUM", confidence: 0.82,
+    title: "Commodity Exposure — Steel, Copper & Refrigerant Headwinds",
+    claim: "Atlas actively manages commodity exposure through a forward purchasing program. Copper and steel costs are locked for Q1–Q2 FY2026 at favorable rates, providing cost visibility and margin protection through the near term.",
+    claimSource: "CIM p.19, §4.4 Cost Structure",
+    evidence: "Dynamics 365 purchase contracts: Copper locked $3.84/lb through Jun 2026 (spot $4.71/lb — favorable). Steel locked $847/ton through Mar 2026 only — not Q2. Steel spot $934/ton. Refrigerant R-410A: no hedging program, +34% YoY (EPA AIM Act phasedown).",
+    evidenceSource: "Dynamics 365 F&O — purchase contracts, commodity purchase history — LME spot Jan 14, 2026 — EPA AIM Act filings — queried Jan 16, 2026",
+    divergence: "Steel contracts expire March 31, 2026 (Q1 only). CIM states 'Q1–Q2' — actual contract document (Atlas_Steel_Supply_Agreement_2025.pdf p.3) shows March 31 termination. 100% steel spot in Q2 at $934/ton. Copper 38% unhedged. Refrigerant R-410A +34% YoY, no hedge.",
+    financialImpact: "Combined unhedged commodity headwind Q2–Q4 FY2026: Steel $1.1M + Copper unhedged $420K + Refrigerant $680K = $2.2M not in projections. FY2026 EBITDA at risk of 10%–15% H2 shortfall.",
+    valuationImpact: "$2.2M commodity headwind at 6.6x = $14.5M. Combined with FIN-004 warranty restatement: $29M total valuation consideration. Steel contract discrepancy findable with basic data room review.",
+    threads: [
+      "Steel contract discrepancy: CIM states 'Q1–Q2 FY2026.' Actual contract in data room (Atlas_Steel_Supply_Agreement_2025.pdf, p.3) shows termination March 31, 2026. CIM does not match the document it references",
+      "R-410A EPA AIM Act: 40% production allowance reduction in 2026. Atlas equipment line includes R-410A units through FY2026 model year. No transition timeline in product roadmap",
+      "Copper 38% unhedged: structural — forward contracts cover standard production volumes, custom work is always spot. Not a risk management failure, a permanent structural exposure not disclosed",
+    ],
+    ledgerHash: "f8c2d7a1e6b0f5c9d4a8e3b7f2c6d1a5e0b4f9c3d7a2e6b1f5c0d4a9e3b8f2c7",
+  },
+];
+
+const PLAN_ITEMS = [
+  {
+    id: "P-03", title: "Charlotte OEE Recovery — Process Engineering", finding: "OPS-005",
+    assumption: "Hire 2 process engineers Q1, implement lean manufacturing program Q2, target OEE improvement from current 74% to 85% by month 6. Projected throughput recovery: $3.8M annualized. Investment: $380K.",
+    planTarget: "85% OEE by Month 6", verdict: "INVALID", risk: "HIGH",
+    assessment: "The Charlotte OEE gap is not a process problem. It is a physical constraint — a manifold press in OSHA hold 147 days, 3 critical assets past service interval, and an elevated safety culture (1.5 recordable rate vs 0.8 industry). Process engineers cannot fix an OSHA-held press or catch up $1.8M deferred maintenance. Plan's OEE baseline of 74% is also wrong — Verus found 67.1% in Fiix. The gap is 13.9 points, not 7.",
+    correctedSequence: "Month 1–3: OSHA inspection and press safety remediation ($85K–$120K). Month 3–9: Deferred maintenance program ($1.8M). Month 6+: Safety culture intervention. Month 9+: Process improvement. Realistic Month 6 OEE: 73%–76%. Month 12 OEE of 85% achievable on corrected sequence.",
+    yearOne: "$1.4M vs plan $3.8M", yearTwo: "$3.6M (achievable on corrected plan)",
+  },
+  {
+    id: "P-07", title: "Healthcare Vertical Expansion — Meridian Pipeline", finding: "COM-002",
+    assumption: "Convert Meridian Children's Pavilion ($4.8M) and Meridian Oncology Center ($3.1M) in H1 2026. Healthcare grows from 31% to 38% of revenue. Investment: $220K dedicated healthcare resources.",
+    planTarget: "$7.9M Meridian revenue H1 2026", verdict: "AT RISK", risk: "HIGH",
+    assessment: "Meridian Children's Pavilion is in Cook County environmental review — 14-month average from June 2025. Does not ship H1 2026. Meridian CFO departed Nov 2025, capital freeze concern in CRM notes. Oncology Center ($3.1M) is engineering phase only — no PO, 18-month horizon. Plan's $7.9M H1 assumption is not achievable.",
+    correctedSequence: "Meridian Pavilion: H2 2026 at earliest, more likely Q1 2027. Oncology: 18-month pipeline. Immediately qualify replacement healthcare accounts. H1 2026 realistic healthcare revenue: $5.2M.",
+    yearOne: "$5.2M vs plan $7.9M", yearTwo: "Recoverable if Pavilion permits Q1 2027",
+  },
+  {
+    id: "P-11", title: "Commodity Cost Management — FY2026 Stability", finding: "FIN-006",
+    assumption: "Raw material costs stable through FY2026 based on existing forward contracts. No incremental commodity cost pressure in projections. No hedging budget allocated.",
+    planTarget: "FY2026 COGS consistent with FY2025", verdict: "INVALID", risk: "MEDIUM",
+    assessment: "Steel contracts expire March 2026 (Q1), not Q2. 100% steel becomes spot in Q2 at $934/ton vs $847/ton locked — $1.1M annualized headwind. Copper 38% unhedged ($420K). Refrigerant R-410A +34% YoY, no hedging program ($680K). Combined $2.2M commodity cost pressure not in FY2026 projections.",
+    correctedSequence: "Immediately extend steel contracts or execute Q2–Q4 hedges. Evaluate R-410A to R-32 transition for FY2027 model year. Budget $2.2M commodity headwind in H2 FY2026 financial plan.",
+    yearOne: "−$2.2M vs plan (headwind, not recovery)", yearTwo: "Manageable with hedging program in place",
+  },
+];
+
+const CHAT_CONTEXT = `You are the Verus Intelligence Chat engine for Project Meridian — confirmatory diligence on Atlas Climate Systems, a commercial HVAC manufacturer. $148M acquisition by Apex Industrial Partners from Ridgeline Capital.
+
+FULL FINDINGS:
+
+COM-001 DIVERGENT HIGH (confidence 0.93): Revenue $48.1M stated. Organic unit growth 9.1%, ASP +4.2%, implied organic ~$45.0M. Gap: (1) $4.1M service contract pull-forward — Q3 FY2025 billing date change moved FY2026 renewals into FY2025, FY2026 Q1 billings 61% below prior year; (2) $2.8M warranty unit reclassification cost-to-revenue; (3) $1.6M BuildRight distributor stocking 90-day return window expires Feb 15 2026; (4) 4 more distributor stocking orders $3.6M with open return windows. Total open return exposure $5.2M.
+
+COM-002 DIVERGENT HIGH (confidence 0.91): Concentration claimed 12% max. Actual: Meridian Healthcare 27.3% ($13.1M), DataVault 14.1% ($6.8M). Meridian Children's Pavilion $4.8M in Cook County environmental review (14-month avg from June 2025, does not ship 2026). DataVault Phoenix $5.4M blocked by 9-month utility upgrade. Meridian CFO departed Nov 2025, CRM Dec notes "capital uncertainty at Meridian." Combined 2026 at risk $10.2M.
+
+OPS-003 DIVERGENT HIGH (confidence 0.94): Backlog $41.2M claimed firm = 10.2 months. Firm (deposited unconditional): $19.4M = 4.8 months. Conditional: $8.3M Meridian permit-hold, $5.2M distributor stocking with returns, $4.1M Cornerstone GC-conditional (on credit hold, orders entered after hold, existing project $880K 90 days past due), $4.2M LOI-only.
+
+FIN-004 PARTIAL MEDIUM (confidence 0.88): EBITDA $22.4M confirmed. Warranty costs $2.3M/$2.1M/$1.9M last 3 years excluded all 3 as "non-recurring" — structural issue (refrigerant fitting spec FY2020-2022 vintage ~4,200 units in field, documented CMMS WO-2023-1842, known 3 years, never disclosed). True recurring EBITDA $20.2M midpoint, 27.9% margin, 7.3x true multiple.
+
+OPS-005 DIVERGENT HIGH (confidence 0.89): OEE claimed 81% blended. Actual: Atlanta 84.2%, Memphis 79.3%, Charlotte 67.1%. Charlotte Line 2 press OSHA hold 147 days (Sep 14 2025, no inspection, no closure, not disclosed). OSHA rate 1.5/100 vs 0.8 industry. $1.8M deferred maintenance, 3 assets past service interval (press OSHA hold, refrigerant recovery system EPA 608 risk, overhead crane OSHA 1910.179 overdue). WC reserve underfunded $310K-$340K. "23% capacity expansion" = 8% effective. "No material capex" is false — $2.2M-$2.3M required.
+
+FIN-006 DIVERGENT MEDIUM (confidence 0.82): Steel contracts expire March 31 2026 (Q1 only, CIM says Q1-Q2, contract doc says March 31). 100% steel spot Q2+ at $934/ton vs $847/ton = $1.1M headwind. Copper 38% unhedged $420K. Refrigerant R-410A +34% YoY EPA phasedown no hedge $680K. Total $2.2M unhedged commodity headwind not in projections.
+
+COMBINED: Stated 6.6x. Verus-adjusted on $20.2M recurring EBITDA: 7.3x. Warranty + commodity at 6.6x = $29M valuation consideration.
+
+RULES: Specific numbers, cite finding and system. 2-4 sentences max unless asked for more. State explicitly when data is unavailable. No deal recommendations. No speculation.`;
+
+const SUGGESTED_QUESTIONS = [
+  "Walk me through the Meridian Healthcare revenue — what's actually at risk in 2026?",
+  "The distributor stocking orders — how many, which distributors, what's the exposure if they all come back?",
+  "Charlotte — straight answer. Buy-and-fix or structural problem?",
+  "Run the EBITDA scenario where warranty is recurring, Meridian Children's doesn't close, and commodity hits Q3.",
+  "The Cornerstone credit hold — how did $4.1M in orders get entered after a credit hold?",
+  "Strip backlog to firm, deposited, unconditional only — real number and coverage?",
+];
+
+const C = {
+  bg: "#0d0f12", bg2: "#141720", bg3: "#1a1d24",
+  border: "#2a2d35", border2: "#1e2128",
+  text: "#e8e6e1", textMuted: "#8a8880", textDim: "#4a5060",
+  gold: "#c8a96e", red: "#e74c3c", green: "#27ae60", blue: "#4a7ab0",
+  redBg: "#3a1a1a", goldBg: "#2a2a1a", greenBg: "#1a2a1a",
+  redBorder: "#5a2a2a", goldBorder: "#4a4a2a", greenBorder: "#2a4a2a",
+  mono: "'DM Mono', monospace", serif: "'Instrument Serif', serif", sans: "'DM Sans', sans-serif",
+};
+
+const vColor = (v) => v === "DIVERGENT" ? C.red : v === "PARTIAL" ? C.gold : C.green;
+const vBg = (v) => v === "DIVERGENT" ? C.redBg : v === "PARTIAL" ? C.goldBg : C.greenBg;
+const vBorder = (v) => v === "DIVERGENT" ? C.redBorder : v === "PARTIAL" ? C.goldBorder : C.greenBorder;
+
+function ConfBar({ v }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{ width: 80, height: 3, borderRadius: 2, background: `linear-gradient(90deg, ${C.green} ${v * 100}%, ${C.border2} ${v * 100}%)` }} />
+      <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>{Math.round(v * 100)}%</span>
+    </div>
+  );
+}
+
+function Badge({ children, verdict }) {
+  return (
+    <span style={{ padding: "4px 10px", borderRadius: 4, fontFamily: C.mono, fontSize: 10, letterSpacing: 1, background: vBg(verdict), color: vColor(verdict), border: `1px solid ${vBorder(verdict)}` }}>
+      {children}
+    </span>
+  );
+}
+
+function Label({ children }) {
+  return <div style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 6, marginTop: 16 }}>{children}</div>;
+}
+
+function FindingCard({ f }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ background: C.bg2, border: `1px solid ${vBorder(f.verdict)}`, borderLeft: `3px solid ${vColor(f.verdict)}`, borderRadius: 8, marginBottom: 16, overflow: "hidden" }}>
+      <div style={{ padding: "16px 20px", cursor: "pointer", display: "flex", gap: 16, alignItems: "flex-start" }} onClick={() => setOpen(!open)}>
+        <div style={{ flex: 1 }}>
+          <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>{f.id} · {f.domain}</span>
+          <div style={{ fontSize: 15, fontWeight: 500, color: C.text, marginTop: 4, lineHeight: 1.3 }}>{f.title}</div>
+          <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 8 }}>
+            <ConfBar v={f.confidence} />
+            <span style={{ padding: "3px 8px", borderRadius: 3, fontFamily: C.mono, fontSize: 9, letterSpacing: 1, background: f.materiality === "HIGH" ? "#2a1a1a" : C.bg3, color: f.materiality === "HIGH" ? C.red : C.textDim, border: `1px solid ${f.materiality === "HIGH" ? "#4a2a2a" : C.border}` }}>{f.materiality}</span>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8, flexShrink: 0 }}>
+          <Badge verdict={f.verdict}>{f.verdict}</Badge>
+          <span style={{ fontFamily: C.mono, fontSize: 11, color: "#3a4050" }}>{open ? "▲" : "▼"}</span>
+        </div>
+      </div>
+      {open && (
+        <div style={{ padding: "0 20px 20px", borderTop: `1px solid ${C.border2}` }}>
+          <Label>Management Claim</Label>
+          <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{f.claim}</div>
+          <div style={{ fontFamily: C.mono, fontSize: 11, color: "#4a7a9b", background: "#0a1520", padding: "6px 10px", borderRadius: 4, marginTop: 4 }}>↗ {f.claimSource}</div>
+          <Label>System Evidence</Label>
+          <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{f.evidence}</div>
+          <div style={{ fontFamily: C.mono, fontSize: 11, color: "#4a7a9b", background: "#0a1520", padding: "6px 10px", borderRadius: 4, marginTop: 4 }}>⊡ {f.evidenceSource}</div>
+          <Label>Divergence</Label>
+          <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{f.divergence}</div>
+          <Label>Financial Impact</Label>
+          <div style={{ fontSize: 13, color: "#e8c87e", lineHeight: 1.6 }}>{f.financialImpact}</div>
+          <Label>Valuation Consideration</Label>
+          <div style={{ fontSize: 13, color: "#e87e7e", lineHeight: 1.6 }}>{f.valuationImpact}</div>
+          {f.threads.length > 0 && (
+            <>
+              <Label>Thread Findings ({f.threads.length})</Label>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {f.threads.map((t, i) => (
+                  <div key={i} style={{ display: "flex", gap: 10, padding: "8px 12px", background: C.bg, borderRadius: 4, border: `1px solid ${C.border2}` }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.gold, marginTop: 5, flexShrink: 0 }} />
+                    <div style={{ fontSize: 12, color: "#8a8880", lineHeight: 1.5 }}>{t}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 16, padding: "8px 12px", background: "#0a0c0f", borderRadius: 4, border: `1px solid ${C.border2}` }}>
+            <span style={{ fontFamily: C.mono, fontSize: 9, color: "#3a4050", whiteSpace: "nowrap" }}>LEDGER HASH</span>
+            <span style={{ fontFamily: C.mono, fontSize: 10, color: "#2a5a3a", wordBreak: "break-all", flex: 1 }}>{f.ledgerHash}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "2px 6px", background: "#0a1a0a", borderRadius: 3, border: "1px solid #1a3a1a", flexShrink: 0 }}>
+              <div style={{ width: 5, height: 5, borderRadius: "50%", background: C.green }} />
+              <span style={{ fontFamily: C.mono, fontSize: 9, color: C.green }}>INTACT</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PlanCard({ item }) {
+  const [open, setOpen] = useState(false);
+  const mapV = item.verdict === "INVALID" ? "DIVERGENT" : item.verdict === "AT RISK" ? "PARTIAL" : "CONFIRMED";
+  return (
+    <div style={{ background: C.bg2, border: `1px solid ${vBorder(mapV)}`, borderLeft: `3px solid ${vColor(mapV)}`, borderRadius: 8, marginBottom: 16, overflow: "hidden" }}>
+      <div style={{ padding: "16px 20px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }} onClick={() => setOpen(!open)}>
+        <div style={{ flex: 1 }}>
+          <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>{item.id} · {item.finding}</span>
+          <div style={{ fontSize: 15, fontWeight: 500, color: C.text, marginTop: 4 }}>{item.title}</div>
+          <div style={{ fontSize: 12, color: C.textDim, marginTop: 6, lineHeight: 1.4 }}>{item.assumption.substring(0, 100)}...</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, flexShrink: 0, marginLeft: 16 }}>
+          <Badge verdict={mapV}>{item.verdict}</Badge>
+          <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>RISK: {item.risk}</span>
+        </div>
+      </div>
+      {open && (
+        <div style={{ padding: "0 20px 20px", borderTop: `1px solid ${C.border2}` }}>
+          <Label>Plan Assumption</Label>
+          <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{item.assumption}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
+            <div><Label>Plan Target</Label><div style={{ fontSize: 13, color: C.textMuted }}>{item.planTarget}</div></div>
+            <div><Label>Verdict</Label><div style={{ fontSize: 13, color: vColor(mapV), fontWeight: 500 }}>{item.verdict}</div></div>
+          </div>
+          <Label>Verus Assessment</Label>
+          <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>{item.assessment}</div>
+          <Label>Corrected Sequence</Label>
+          <div style={{ fontSize: 13, color: "#8ab8d0", lineHeight: 1.6 }}>{item.correctedSequence}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
+            <div style={{ padding: 12, background: C.bg, borderRadius: 4, border: "1px solid #2a1a1a" }}>
+              <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>YEAR 1 OUTCOME</span>
+              <div style={{ fontSize: 13, color: "#e87e7e", fontWeight: 500, marginTop: 6 }}>{item.yearOne}</div>
+            </div>
+            <div style={{ padding: 12, background: C.bg, borderRadius: 4, border: `1px solid ${C.border}` }}>
+              <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>YEAR 2 OUTLOOK</span>
+              <div style={{ fontSize: 13, color: "#8ab8d0", fontWeight: 500, marginTop: 6 }}>{item.yearTwo}</div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ChatTab() {
+  const [messages, setMessages] = useState([{ role: "assistant", content: "Intelligence Chat is live. I have full access to all six findings, the evidence ledger, and every system query Verus executed on Project Meridian. Ask me anything about Atlas Climate Systems." }]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const endRef = useRef(null);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  const send = useCallback(async (text) => {
+    const msg = text || input.trim();
+    if (!msg || loading) return;
+    setInput("");
+    const updated = [...messages, { role: "user", content: msg }];
+    setMessages(updated);
+    setLoading(true);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 600, system: CHAT_CONTEXT, messages: updated.filter((_, i) => i > 0).map(m => ({ role: m.role, content: m.content })) }),
+      });
+      const data = await res.json();
+      setMessages(m => [...m, { role: "assistant", content: data.content?.[0]?.text || "Error." }]);
+    } catch { setMessages(m => [...m, { role: "assistant", content: "Connection error." }]); }
+    setLoading(false);
+  }, [input, loading, messages]);
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 24, height: "calc(100vh - 200px)", minHeight: 500 }}>
+      <div style={{ display: "flex", flexDirection: "column", background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, overflow: "hidden" }}>
+        <div style={{ padding: "14px 20px", borderBottom: `1px solid ${C.border2}`, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: C.green, boxShadow: `0 0 6px ${C.green}66` }} />
+          <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>INTELLIGENCE CHAT · PROJECT MERIDIAN · ATLAS CLIMATE SYSTEMS</span>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+          {messages.map((m, i) => (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: m.role === "user" ? "flex-end" : "flex-start", gap: 4 }}>
+              <span style={{ fontFamily: C.mono, fontSize: 9, color: "#3a4050" }}>{m.role === "user" ? "DEAL TEAM" : "VERUS"}</span>
+              <div style={{ maxWidth: "85%", padding: "12px 16px", borderRadius: m.role === "user" ? "12px 12px 4px 12px" : "12px 12px 12px 4px", background: m.role === "user" ? "#1e2840" : C.bg3, border: `1px solid ${m.role === "user" ? "#2a3850" : C.border}`, fontSize: 13, color: m.role === "user" ? "#a8b4d0" : C.textMuted, lineHeight: 1.6 }}>{m.content}</div>
+            </div>
+          ))}
+          {loading && (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+              <span style={{ fontFamily: C.mono, fontSize: 9, color: "#3a4050" }}>VERUS</span>
+              <div style={{ padding: "12px 16px", borderRadius: "12px 12px 12px 4px", background: C.bg3, border: `1px solid ${C.border}`, fontSize: 13, color: "#3a4050" }}>Querying evidence...</div>
+            </div>
+          )}
+          <div ref={endRef} />
+        </div>
+        <div style={{ padding: "14px 20px", borderTop: `1px solid ${C.border2}`, display: "flex", gap: 12, alignItems: "flex-end" }}>
+          <textarea style={{ flex: 1, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 6, padding: "10px 14px", color: C.text, fontSize: 13, fontFamily: C.sans, outline: "none", resize: "none", lineHeight: 1.5 }} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} placeholder="Ask anything about this engagement..." rows={2} />
+          <button onClick={() => send()} disabled={loading} style={{ background: loading ? C.bg3 : "#1e2840", border: `1px solid ${loading ? C.border : "#2a3850"}`, borderRadius: 6, padding: "10px 20px", color: loading ? C.textDim : C.blue, fontSize: 12, fontFamily: C.mono, cursor: loading ? "not-allowed" : "pointer", whiteSpace: "nowrap" }}>{loading ? "..." : "SEND"}</button>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16 }}>
+          <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>SUGGESTED QUESTIONS</span>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            {SUGGESTED_QUESTIONS.map((q, i) => (
+              <div key={i} onClick={() => send(q)} style={{ padding: "10px 12px", background: C.bg, border: `1px solid ${C.border2}`, borderRadius: 4, fontSize: 12, color: C.textDim, cursor: "pointer", lineHeight: 1.4 }}
+                onMouseEnter={e => { e.currentTarget.style.color = C.textMuted; }}
+                onMouseLeave={e => { e.currentTarget.style.color = C.textDim; }}>{q}</div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: 16 }}>
+          <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>CHAT RULES</span>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+            {["All answers grounded in retrieved evidence", "Every answer cites its source finding", "No speculation beyond available data", "No acquisition recommendations", "Data gaps identified explicitly"].map((r, i) => (
+              <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#2a5060", marginTop: 5, flexShrink: 0 }} />
+                <div style={{ fontSize: 11, color: C.textDim, lineHeight: 1.4 }}>{r}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tab, setTab] = useState("overview");
+  const divergent = FINDINGS.filter(f => f.verdict === "DIVERGENT").length;
+  const partial = FINDINGS.filter(f => f.verdict === "PARTIAL").length;
+
+  return (
+    <div style={{ background: C.bg, minHeight: "100vh", fontFamily: C.sans, color: C.text, fontSize: 14 }}>
+      <div style={{ background: "linear-gradient(180deg, #141720 0%, #0d0f12 100%)", borderBottom: `1px solid ${C.border}`, padding: "0 32px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0 16px", borderBottom: `1px solid ${C.border2}` }}>
+          <div>
+            <div style={{ fontFamily: C.serif, fontSize: 26, color: C.text, letterSpacing: "-0.5px" }}>Verus</div>
+            <div style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim, letterSpacing: 2, marginTop: 2 }}>CONFIRMATORY DILIGENCE · THE RESONANCE INSTITUTE</div>
+          </div>
+          <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 6, padding: "10px 20px", display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
+            {[["Engagement", ENGAGEMENT.name], ["Target", ENGAGEMENT.target], ["Deal Size", ENGAGEMENT.dealSize], ["Stage", ENGAGEMENT.stage], ["Status", "● ACTIVE", C.green]].map(([label, value, color], i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <span style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim }}>{label}</span>
+                <span style={{ fontSize: 13, color: color || "#c8c4bc", fontWeight: 500 }}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: "flex" }}>
+          {[{ id: "overview", label: "Overview" }, { id: "findings", label: `Findings (${FINDINGS.length})` }, { id: "plan", label: "100-Day Stress Test" }, { id: "chat", label: "Intelligence Chat" }].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: "14px 24px", fontFamily: C.mono, fontSize: 11, letterSpacing: 1, textTransform: "uppercase", color: tab === t.id ? C.text : C.textDim, background: "none", border: "none", borderBottom: `2px solid ${tab === t.id ? C.gold : "transparent"}`, cursor: "pointer" }}>{t.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: 32, maxWidth: 1280, margin: "0 auto" }}>
+
+        {tab === "overview" && (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 32 }}>
+              {[
+                { num: divergent, label: "Divergent Findings", detail: "Material gaps between narrative and system data", color: C.red },
+                { num: partial, label: "Partial Findings", detail: "Confirmed with material qualifications", color: C.gold },
+                { num: "$29M", label: "Valuation Consideration", detail: "Warranty + commodity at 6.6x multiple", color: "#e87e3e" },
+                { num: "7.3x", label: "Verus-Adjusted Multiple", detail: `On ${ENGAGEMENT.verusEBITDA} recurring EBITDA`, color: C.blue },
+              ].map((c, i) => (
+                <div key={i} style={{ background: C.bg2, border: `1px solid ${c.color}22`, borderTop: `2px solid ${c.color}`, borderRadius: 8, padding: 20 }}>
+                  <div style={{ fontFamily: C.serif, fontSize: 38, color: c.color, lineHeight: 1 }}>{c.num}</div>
+                  <div style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim, letterSpacing: "1.5px", textTransform: "uppercase", marginTop: 6 }}>{c.label}</div>
+                  <div style={{ fontSize: 12, color: "#6a7080", marginTop: 8 }}>{c.detail}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
+              <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20 }}>
+                <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>ENGAGEMENT</span>
+                {[["Target", ENGAGEMENT.target], ["Sponsor", ENGAGEMENT.sponsor], ["Deal Size", ENGAGEMENT.dealSize], ["Stated EBITDA", ENGAGEMENT.statedEBITDA], ["Verus-Adjusted EBITDA", ENGAGEMENT.verusEBITDA], ["Products", ENGAGEMENT.products], ["Markets", ENGAGEMENT.markets], ["Plants", ENGAGEMENT.plants], ["Employees", ENGAGEMENT.employees], ["Window", ENGAGEMENT.window]].map(([k, v]) => (
+                  <div key={k} style={{ display: "flex", gap: 12, marginTop: 10, alignItems: "flex-start" }}>
+                    <div style={{ fontFamily: C.mono, fontSize: 10, color: "#3a4050", width: 130, flexShrink: 0, paddingTop: 1 }}>{k}</div>
+                    <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.4 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20 }}>
+                <span style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>CONNECTED SYSTEMS</span>
+                <div style={{ marginTop: 12 }}>
+                  {ENGAGEMENT.connectors.map(c => (
+                    <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, padding: "10px 12px", background: C.bg, borderRadius: 4, border: `1px solid ${C.border2}` }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green, boxShadow: `0 0 4px ${C.green}66` }} />
+                      <span style={{ fontFamily: C.mono, fontSize: 11, color: "#6a8060" }}>{c}</span>
+                      <span style={{ marginLeft: "auto", fontFamily: C.mono, fontSize: 9, color: C.green }}>READ-ONLY · CONNECTED</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ marginTop: 16, padding: "12px 16px", background: "#0a1a0a", borderRadius: 4, border: "1px solid #1a3a1a" }}>
+                  <span style={{ fontFamily: C.mono, fontSize: 9, color: C.green }}>EVIDENCE CHAIN</span>
+                  <div style={{ fontFamily: C.mono, fontSize: 10, color: "#2a5a3a", marginTop: 4 }}>{FINDINGS.length} findings cryptographically committed · All chains verified intact</div>
+                  <div style={{ fontFamily: C.mono, fontSize: 10, color: "#2a5a3a", marginTop: 2 }}>Report root hash generated · INSERT-only ledger enforced</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
+              <span>EBITDA BRIDGE</span>
+              <div style={{ flex: 1, height: 1, background: C.border2 }} />
+            </div>
+            <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 0 }}>
+                {[
+                  { label: "Stated Adj. EBITDA", value: "$22.4M", color: C.blue },
+                  { label: "Warranty restatement", value: "−$2.2M", color: C.red },
+                  { label: "Charlotte one-time reclass", value: "−$0.7M", color: C.red },
+                  { label: "Commodity H2 headwind", value: "−$2.2M", color: C.red },
+                  { label: "Other adjustments", value: "+$0.7M", color: C.gold },
+                  { label: "Verus Recurring EBITDA", value: "$20.2M", color: C.gold },
+                ].map((item, i) => (
+                  <div key={i} style={{ textAlign: "center", padding: "16px 8px", borderRight: i < 5 ? `1px solid ${C.border2}` : "none" }}>
+                    <div style={{ fontFamily: C.serif, fontSize: 22, color: item.color, marginBottom: 8 }}>{item.value}</div>
+                    <div style={{ fontFamily: C.mono, fontSize: 9, color: C.textDim, lineHeight: 1.5 }}>{item.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 16, padding: "10px 16px", background: C.bg, borderRadius: 4, display: "flex", gap: 32, flexWrap: "wrap" }}>
+                {[["Stated Multiple", "6.6x", C.blue], ["Verus-Adjusted Multiple", "7.3x", C.gold], ["Combined Valuation Consideration", "$29M at deal multiple", "#e87e3e"]].map(([label, value, color]) => (
+                  <span key={label} style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim }}>{label} <span style={{ color }}>{value}</span></span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {tab === "findings" && (
+          <div>
+            <div style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim, letterSpacing: 2, marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
+              <span>{divergent} DIVERGENT · {partial} PARTIAL · {FINDINGS.filter(f => f.verdict === "CONFIRMED").length} CONFIRMED</span>
+              <div style={{ flex: 1, height: 1, background: C.border2 }} />
+              <span style={{ whiteSpace: "nowrap" }}>ALL CHAINS VERIFIED INTACT</span>
+            </div>
+            {FINDINGS.map(f => <FindingCard key={f.id} f={f} />)}
+          </div>
+        )}
+
+        {tab === "plan" && (
+          <div>
+            <div style={{ fontFamily: C.mono, fontSize: 10, color: C.textDim, letterSpacing: 2, marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
+              <span>100-DAY PLAN STRESS TEST · 3 OF 11 INITIATIVES ASSESSED</span>
+              <div style={{ flex: 1, height: 1, background: C.border2 }} />
+            </div>
+            <div style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 8, padding: "16px 20px", marginBottom: 24 }}>
+              <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>Apex Industrial Partners' 100-day plan uploaded January 17, 2026. Verus evaluated each initiative against operating evidence from 4 connected systems. 11 total initiatives. 3 flagged for material concern. 8 initiatives clear.</div>
+            </div>
+            {PLAN_ITEMS.map(item => <PlanCard key={item.id} item={item} />)}
+            <div style={{ background: "#0a1a0a", border: "1px solid #1a3a1a", borderRadius: 8, padding: "16px 20px" }}>
+              <span style={{ fontFamily: C.mono, fontSize: 10, color: C.green }}>8 INITIATIVES NOT FLAGGED</span>
+              <div style={{ fontSize: 12, color: "#4a6040", marginTop: 8, lineHeight: 1.6 }}>P-01 (Memphis chiller capacity) · P-02 (Atlanta RTU optimization) · P-04 (ERP integration) · P-05 (service contract renewals) · P-06 (Atlanta workforce training) · P-08 (data center vertical) · P-09 (distributor rationalization) · P-10 (management incentive alignment) — no material conflict with system evidence found.</div>
+            </div>
+          </div>
+        )}
+
+        {tab === "chat" && <ChatTab />}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
