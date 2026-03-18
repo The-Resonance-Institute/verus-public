@@ -1,0 +1,94 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL + pgvector ──────────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: verus-postgres
+    environment:
+      POSTGRES_USER: verus
+      POSTGRES_PASSWORD: verus_dev
+      POSTGRES_DB: verus
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infrastructure/docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U verus -d verus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── LocalStack (S3 emulation) ──────────────────────────────────────────────
+  localstack:
+    image: localstack/localstack:3.7
+    container_name: verus-localstack
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: us-east-1
+      AWS_DEFAULT_REGION: us-east-1
+    ports:
+      - "4566:4566"
+    volumes:
+      - localstack_data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API ────────────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      target: app
+    container_name: verus-api
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://verus:verus_dev@postgres:5432/verus
+      DATABASE_URL_SYNC: postgresql://verus:verus_dev@postgres:5432/verus
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./packages:/app/packages:ro
+      - ./services:/app/services:ro
+
+  # ── Ingestion Worker ───────────────────────────────────────────────────────
+  worker:
+    build:
+      context: .
+      target: app
+    container_name: verus-worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://verus:verus_dev@postgres:5432/verus
+      DATABASE_URL_SYNC: postgresql://verus:verus_dev@postgres:5432/verus
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    command: ["python", "-m", "packages.ingestion.worker"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./packages:/app/packages:ro
+
+volumes:
+  pgdata:
+  localstack_data:

@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.eggs/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+coverage.xml
+coverage_html/
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+*.tar
+
+# Alembic
+# Keep versions/ but ignore any local state
+alembic/versions/__pycache__/
+
+# Logs
+*.log
+logs/
+
+# Node (if any tooling)
+node_modules/
+
+# Distribution
+*.tar.gz
+*.zip
+
+# Business documents
+*.docx
+*.xlsx
+*.pdf
